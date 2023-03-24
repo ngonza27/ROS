@@ -1,0 +1,9 @@
+$ catkin_make - when you add a new package (inside of catckin_wp folder)
+$ source ~/.bashrc - after the catkin_make command
+
+Usefull ros commands:
+$ roscore
+$ rqt_graph
+$ rostopic list
+$ rostopic info [topic_name]
+$ rosrun [pkg_name] [file_name]
