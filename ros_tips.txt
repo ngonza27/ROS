@@ -1,3 +1,4 @@
+$ catkin_create_pkg [pkg_name] [libraries_and_dependencies_list] ex: $ catkin_create_pkg my_pkg rospy roscpp turtlesim std_msgs message_generation
 $ catkin_make - when you add a new package (inside of catckin_wp folder)
 $ source ~/.bashrc - after the catkin_make command
 
