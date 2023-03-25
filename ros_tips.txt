@@ -19,3 +19,5 @@ Type: carla_msgs/CarlaEgoVehicleInfo
 
 /carla/ego_vehicle/vehicle_status
 Type: carla_msgs/CarlaEgoVehicleStatus
+
+https://bitbucket.org/DataspeedInc/oxford_gps_eth/src/master/README.md
