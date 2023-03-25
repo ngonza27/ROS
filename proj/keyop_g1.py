@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+#This file goes inside /home/carla/Desktop/catkin_ws/src/av_carla_examples/scripts
 '''
 ackermann_drive_keyop.py:
     A ros keyboard teleoperation script for ackermann steering based robots
