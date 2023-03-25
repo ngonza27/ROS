@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#This file goes inside /home/carla/Desktop/catkin_ws/src/av_carla_examples/scripts
 
 import glob
 import os
