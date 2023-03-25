@@ -1,0 +1,10 @@
+<!-- This files goes in /home/carla/Desktop/catkin_ws/src/av_carla_examples/launch -->
+<launch>
+
+  <node pkg="av_carla_examples" name="vehicle_sim" type="simple_car.py" output="screen" required="true">
+  </node>
+
+  <node pkg="av_carla_examples" name="keyop" type="keyop_g1.py" args="4 0.4 /carla/ego_vehicle/ackermann_cmd" output="screen" required="true">
+  </node>
+
+</launch>
