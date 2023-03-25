@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# This file goes home/carla/Desktop/catkin_ws/src/av_carla_examples/scripts
+
 '''
 ackermann_drive_keyop.py:
     A ros keyboard teleoperation script for ackermann steering based robots
@@ -13,7 +13,12 @@ __email__ = 'gkourosg@yahoo.gr'
 import roslib
 import rospy
 from ackermann_msgs.msg import AckermannDrive
-from carla_msgs.msg import CarlaEgoVehicleInfo, CarlaEgoVehicleStatus, CarlaEgoVehicleInfoWheel
+from carla_msgs.msg import CarlaEgoVehicleStatus
+from tf.transformations import euler_from_quaternion
+from sensor_msgs.msg import NavSatFix
+#Package for the OxTS GPS
+from nav_msgs.msg import Odometry
+from geometry_msgs.msg import PoseStamped
 from std_msgs.msg import Float64
 import sys, select, termios, tty
 
@@ -41,14 +46,23 @@ key_bindings = {
     '\x09' : ( 0.0 , 0.0)}
 
 orientation=0
+ego_latitude=0
+ego_longitude=0
+def gnss_callback(data):
+    global ego_latitude, ego_longitude
+    ego_latitude = data.latitude
+    ego_longitude = data.longitude
+   
+
 def pose_callback(status):
     global orientation
     orientation = status.orientation
+    (roll, pitch, yaw) = euler_from_quaternion([orientation.x, orientation.y, orientation.z, orientation.w])
+
+
 
 class AckermannDriveKeyop:
 
-
-    wheels=[]
     def __init__(self, args):
         if len(args) == 1:
             max_speed = float(args[0])
@@ -80,18 +94,16 @@ class AckermannDriveKeyop:
         rospy.Timer(rospy.Duration(1.0/5.0), self.pub_callback, oneshot=False)
         self.print_state()
         self.key_loop()
-    
 
     def pub_callback(self, event):
         ackermann_cmd_msg = AckermannDrive()
-        ackermann_cmd_msg.speed = self.speed
+        ackermann_cmd_msg.speed = 5
         ackermann_cmd_msg.steering_angle = self.steering_angle
         self.motors_pub.publish(ackermann_cmd_msg)
 
     def print_state(self):
-	global orientation 
+        global orientation, ego_latitude, ego_longitude
         sys.stderr.write('\x1b[2J\x1b[H')
-        rospy.loginfo(orientation)
         rospy.loginfo('\x1b[1M\r*********************************************')
         rospy.loginfo('\x1b[1M\rUse arrows to change speed and steering angle')
         rospy.loginfo('\x1b[1M\rUse space to brake and tab to align wheels')
@@ -101,6 +113,9 @@ class AckermannDriveKeyop:
                       '\033[34;1mSpeed: \033[32;1m%0.2f m/s, '
                       '\033[34;1mSteer Angle: \033[32;1m%0.2f rad\033[0m',
                       self.speed, self.steering_angle)
+	#rospy.logwarn(orientation)
+        rospy.logwarn(ego_latitude)
+        rospy.logwarn(ego_longitude)
 
     def get_key(self):
         tty.setraw(sys.stdin.fileno())
@@ -148,4 +163,5 @@ class AckermannDriveKeyop:
 if __name__ == '__main__':
     rospy.init_node('ackermann_drive_keyop_node')
     sub=rospy.Subscriber("/carla/ego_vehicle/vehicle_status", CarlaEgoVehicleStatus, callback=pose_callback)
+    sub1=rospy.Subscriber("/carla/ego_vehicle/gnss/default/fix", NavSatFix, callback=gnss_callback)
     keyop = AckermannDriveKeyop(sys.argv[1:len(sys.argv)])
