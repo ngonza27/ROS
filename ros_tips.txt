@@ -8,3 +8,14 @@ $ rqt_graph
 $ rostopic list
 $ rostopic info [topic_name]
 $ rosrun [pkg_name] [file_name]
+
+Topic that publishes to Carla:
+/carla/ego_vehicle/ackermann_cmd
+Type: ackermann_msgs/AckermanDrive
+
+Topics that subscribes from Carla:
+/carla/ego_vehicle/vehicle_info
+Type: carla_msgs/CarlaEgoVehicleInfo
+
+/carla/ego_vehicle/vehicle_status
+Type: carla_msgs/CarlaEgoVehicleStatus
