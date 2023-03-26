@@ -12,6 +12,7 @@ __email__ = 'gkourosg@yahoo.gr'
 
 import roslib
 import rospy
+import math
 from ackermann_msgs.msg import AckermannDrive
 from carla_msgs.msg import CarlaEgoVehicleStatus
 from tf.transformations import euler_from_quaternion
@@ -48,6 +49,7 @@ key_bindings = {
 orientation=0
 ego_latitude=0
 ego_longitude=0
+i=0
 def gnss_callback(data):
     global ego_latitude, ego_longitude
     ego_latitude = data.latitude
@@ -96,9 +98,12 @@ class AckermannDriveKeyop:
         self.key_loop()
 
     def pub_callback(self, event):
+	global i
         ackermann_cmd_msg = AckermannDrive()
-        ackermann_cmd_msg.speed = 5
-        ackermann_cmd_msg.steering_angle = self.steering_angle
+        #ackermann_cmd_msg.speed = self.speed
+        #ackermann_cmd_msg.steering_angle = self.steering_angle
+        ackermann_cmd_msg.speed = 2
+        ackermann_cmd_msg.steering_angle = math.sin(i)*10
         self.motors_pub.publish(ackermann_cmd_msg)
 
     def print_state(self):
@@ -126,10 +131,12 @@ class AckermannDriveKeyop:
 
 
     def key_loop(self):
+        global i
         self.settings = termios.tcgetattr(sys.stdin)
         while 1:
             key = self.get_key()
             if key in key_bindings.keys():
+                i+=0.01
                 if key == control_keys['space']:
                     self.speed = 0.0
                 elif key == control_keys['tab']:
