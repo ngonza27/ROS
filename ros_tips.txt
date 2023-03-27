@@ -21,3 +21,21 @@ Type: carla_msgs/CarlaEgoVehicleInfo
 Type: carla_msgs/CarlaEgoVehicleStatus
 
 https://bitbucket.org/DataspeedInc/oxford_gps_eth/src/master/README.md
+
+---------- GPS DEPENDENCIES START ----------
+from sensor_msgs.msg import NavSatFix
+<depend>std_msgs</depend>
+<depend>geometry_msgs</depend>
+<depend>sensor_msgs</depend>
+<depend>nav_msgs</depend>
+<depend>tf</depend>
+
+<build_depend>geometry_msgs</build_depend>
+<build_export_depend>geometry_msgs</build_export_depend>
+<build_depend>sensor_msgs</build_depend>
+<build_export_depend>sensor_msgs</build_export_depend>
+<build_depend>nav_msgs</build_depend>
+<build_export_depend>nav_msgs</build_export_depend>
+
+carla_ros_bridge
+---------- GPS DEPENDENCIES END ----------
